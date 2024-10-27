@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 3000;
 const { v4: uuidv4 } = require('uuid');
 const QRCode = require('qrcode');
 const { auth, requiresAuth } = require('express-openid-connect');
+const { auth: jwtAuth } = require('express-oauth2-jwt-bearer');
 
 const config = {
   authRequired: false,
@@ -18,6 +19,11 @@ const config = {
 
 app.use(auth(config));
 app.use(express.json());
+
+const checkJwt = jwtAuth({
+  audience: process.env.AUTH0_API_IDENTIFIER,
+  issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`,
+});
 
 app.get('/', async (req, res) => {
    try {
@@ -34,8 +40,8 @@ app.listen(PORT, () => {
   console.log(`Server radi na http://localhost:${PORT}`);
 });
 
-app.post('/tickets', async (req, res) => {
-   const { vatin, firstName, lastName } = req.body;
+app.post('/tickets', checkJwt, async (req, res) => {
+  const { vatin, firstName, lastName } = req.body;
    if (!vatin || !firstName || !lastName) {
      return res.status(400).send('Nedostaju potrebni podaci (vatin, firstName, lastName).');
    }
