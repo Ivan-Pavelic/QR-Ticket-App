@@ -25,11 +25,10 @@ app.get('/', async (req, res) => {
      const ticketCount = result.rows[0].count;
      res.send(`Broj dosad generiranih ulaznica: ${ticketCount}`);
    } catch (error) {
-     console.error(error); // Dodaj ovu liniju za ispis greške
+     console.error(error);
      res.status(500).send('Došlo je do greške prilikom učitavanja broja ulaznica.');
    }
- });
- 
+});
 
 app.listen(PORT, () => {
   console.log(`Server radi na http://localhost:${PORT}`);
@@ -84,8 +83,7 @@ app.get('/tickets/:id', requiresAuth(), async (req, res) => {
        <p>Prijavljeni korisnik: ${req.oidc.user.name}</p>
      `);
    } catch (error) {
-     console.error(error); // Dodano za ispis greške
+     console.error(error);
      res.status(500).send('Došlo je do greške prilikom dohvaćanja podataka o ulaznici.');
    }
- });
- 
+});
