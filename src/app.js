@@ -62,9 +62,9 @@ app.post('/tickets', checkJwt, async (req, res) => {
        [ticketId, vatin, firstName, lastName]
      );
  
-     const ticketUrl = `http://localhost:${PORT}/tickets/${ticketId}`;
+     const ticketUrl = `https://qr-ticket-app-xrrj.onrender.com/tickets/${ticketId}`;
      const qrCodeImage = await QRCode.toDataURL(ticketUrl);
- 
+
      res.status(201).send(`<img src="${qrCodeImage}" alt="QR Code" />`);
    } catch (error) {
      res.status(500).send('Došlo je do greške prilikom generiranja ulaznice.');
